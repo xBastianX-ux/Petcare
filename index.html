@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PetCare - Agenda Digital para Mascotas</title>
+    <link rel="stylesheet" href="CSS/styles.css" />
+</head>
+<body>
+    <!-- ===== HEADER / NAVBAR ===== -->
+    <header class="navbar">  
+        <img src="IMG/Petcare.png" width="150" height="130" alt="PetCare Logo">
+    </header>
+
+    <!-- ===== HERO SECTION ===== -->
+    <main class="hero">
+        <div class="hero-content">
+            <h1>🐾 Hola, Somos PetCare. 🐾</h1>
+            <p>Ayudamos a organizar y controlar el cuidado y salud de las mascotas mediante una agenda digital</p>
+           <button class="btn-unir" onclick="window.location.href='registro.html'">¡Quiero unirme!</button>
+        </div>
+        <div class="hero-image">
+            <div class="image-container">
+                <img src="IMG/Foto.jpg" alt="Mascota feliz"> 
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== SECCIÓN PERFILES DE MASCOTAS (INTERACTIVA) ===== -->
+    <section class="perfiles-section">
+        
+        <h2 class="perfiles-titulo">🐾 Perfiles de Mascotas</h2>
+        
+        <div class="perfiles-container">
+            <!-- Tarjeta Principal de Max -->
+            <div class="perfil-card">
+                <div class="perfil-header">
+                    <div class="perfil-avatar">
+                        <img src="IMG/perro-icon.webp" alt="Max" onerror="this.src='https://via.placeholder.com/100x100?text=🐕'">
+                    </div>
+                    <div class="perfil-info">
+                        <h3>Max - Pitbull</h3>
+                        <div class="perfil-detalles">
+                            <span class="detalle">Edad: 3 años</span>
+                            <span class="detalle">Color: Café</span>
+                            <span class="detalle">Peso: 28kg</span>
+                        </div>
+                    </div>
+                <div id="contenedor-perfiles-mascotas" class="perfiles-grid">
+    </div>
+
+<div id="modalMascota" class="modal-petcare" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 25px; border-radius: 12px; width: 400px;">
+        <h3>🐾 Registrar Nueva Mascota</h3>
+        <form id="form-nueva-mascota">
+            <input type="text" id="nombre-m" name="nombre" placeholder="Nombre" required style="width: 100%; margin-bottom: 10px; padding: 8px;">
+            <input type="text" id="raza-m" name="raza" placeholder="Raza (ej: Pitbull)" required style="width: 100%; margin-bottom: 10px; padding: 8px;">
+            <input type="text" id="edad-m" name="edad" placeholder="Edad (ej: 3 años)" style="width: 100%; margin-bottom: 10px; padding: 8px;">
+            <input type="number" id="peso-m" name="peso" placeholder="Peso en kg" style="width: 100%; margin-bottom: 15px; padding: 8px;">
+            
+            <div style="display: flex; justify-content: center; gap: 15px;">
+                <button type="submit" style="background: #5cb85c; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;">Guardar</button>
+                <button type="button" onclick="document.getElementById('modalMascota').style.display='none'" style="background: #d9534f; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+                   <div id="lista-mascotas-principal">
+    </div>
+
+<button class="btn-nueva-mascota" onclick="document.getElementById('modalMascota').style.display='flex'">
+    + Nueva Mascota
+</button>
+                </div>
+
+                <!-- Menú de Categorías (Checkboxes ocultos + Labels) -->
+                <div class="categorias-menu">
+              <div class="categoria-item">
+    <input type="checkbox" id="citas-check" class="categoria-checkbox">
+    <label for="citas-check" class="categoria-label">📅 citas</label>
+    
+    <div class="categoria-contenido">
+        <div id="citas-lista-dinamica" class="contenido-citas">
+            </div>
+        
+        <button type="button" class="btn-agregar-registro" id="abrir-modal-cita">
+            + Agregar Cita
+        </button>
+    </div>
+</div>
+
+<div id="modalCita" class="modal-petcare" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 25px; border-radius: 12px; width: 350px; color: #333;">
+        <h3 style="margin-top: 0;">📅 Nueva Cita</h3>
+        <form id="form-cita-registro">
+            <input type="text" id="c-titulo" placeholder="Ej: Consulta General" required style="width: 100%; margin-bottom: 12px; padding: 8px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                <input type="date" id="c-fecha" required style="flex: 1; padding: 8px;">
+                <input type="time" id="c-hora" required style="flex: 1; padding: 8px;">
+            </div>
+            <input type="text" id="c-vet" placeholder="Nombre del Veterinario" style="width: 100%; margin-bottom: 12px; padding: 8px;">
+            <textarea id="c-motivo" placeholder="Motivo o notas..." style="width: 100%; margin-bottom: 15px; height: 70px; padding: 8px;"></textarea>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" onclick="document.getElementById('modalCita').style.display='none'" style="padding: 8px 15px;">Cancelar</button>
+                <button type="submit" style="background: #28a745; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer;">Guardar Cita</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+                    <!-- CITAS -->
+
+                            </div>
+  </div>
+                  
+
+                    <!-- VACUNAS -->
+                    <div class="categoria-item">
+                        <div class="categoria-item">
+    <input type="checkbox" id="vacunas" class="categoria-checkbox">
+    <label for="vacunas" class="categoria-label">💉 vacunas</label>
+    <div class="categoria-contenido">
+        <div id="vacunas-container" class="vacunas-grid">
+            </div>
+        <button class="btn-agregar-registro" data-tipo="vacuna">+ Agregar Vacuna</button>
+    </div>
+</div>
+
+<div id="modalVacuna" class="modal-petcare" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; width: 320px; color: black;">
+        <h3>💉 Registrar Vacuna</h3>
+        <form id="form-nueva-vacuna">
+            <input type="text" id="nombre-v" placeholder="Nombre (ej: Rabia)" required style="width: 100%; margin-bottom: 10px;">
+            <select id="estado-v" style="width: 100%; margin-bottom: 10px;">
+                <option value="Completa">Completa ✅</option>
+                <option value="Pendiente">Pendiente ⏳</option>
+            </select>
+            <label>Fecha Aplicación:</label>
+            <input type="date" id="aplicacion-v" style="width: 100%; margin-bottom: 10px;">
+            <label>Próxima Dosis:</label>
+            <input type="date" id="proxima-v" required style="width: 100%; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between;">
+                <button type="button" onclick="document.getElementById('modalVacuna').style.display='none'">Cancelar</button>
+                <button type="submit" style="background: #28a745; color: white; border: none; padding: 10px; border-radius: 5px;">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+                    </div>
+
+                    <!-- PASEOS -->
+                    <div class="categoria-item">
+                    <div class="categoria-item">
+    <input type="checkbox" id="paseos" class="categoria-checkbox">
+    <label for="paseos" class="categoria-label">🚶 paseos</label>
+    <div class="categoria-contenido">
+        <div id="lista-paseos" class="contenido-paseos">
+            </div>
+        <button type="button" class="btn-agregar-registro" data-tipo="paseo">+ Programar Paseo</button>
+    </div>
+</div>
+
+<div id="modalPaseo" class="modal-petcare" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; width: 320px; color: black;">
+        <h3>🚶 Programar Paseo</h3>
+        <form id="form-nuevo-paseo">
+            <label>Fecha:</label>
+            <input type="date" id="fecha-p" required style="width: 100%; margin-bottom: 10px;">
+            <label>Hora:</label>
+            <input type="time" id="hora-p" required style="width: 100%; margin-bottom: 10px;">
+            <input type="text" id="duracion-p" placeholder="Duración (ej: 45 min)" required style="width: 100%; margin-bottom: 10px;">
+            <input type="text" id="ruta-p" placeholder="Ruta (ej: Parque México)" required style="width: 100%; margin-bottom: 10px;">
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <button type="button" onclick="document.getElementById('modalPaseo').style.display='none'">Cancelar</button>
+                <button type="submit" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Programar</button>
+            </div>
+        </form>
+    </div>
+</div>
+                       
+                    </div>
+             
+
+    <!-- ===== SECCIÓN ENFOQUE ===== -->
+    <section class="enfoque-container"> 
+        <div class="texto">
+            <h1>Nuestro enfoque</h1>
+            <p>Facilitar la vida de los dueños de mascotas permitiéndoles registrar, organizar y administrar toda la información vital sobre el cuidado, la salud y el bienestar de sus compañeros en un solo lugar</p>
+        </div>
+        <div class="imagen"> 
+            <div class="foto">
+                <img src="IMG/enfoque.jpeg" alt="Persona con mascota">
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECCIÓN BENEFICIOS ===== -->
+    <section class="beneficio">
+        <div class="beneficio-card">
+            <p>Recibe notificaciones automáticas para vacunas, desparacitación y citas médicas</p>
+        </div>
+        <div class="beneficio-card">
+            <p>Registra a todos tus compañeros peludos en un solo perfil y gestiona individualmente</p>
+        </div>
+        <div class="beneficio-card">
+            <p>Lleva el control de peso y tratamientos médicos siempre contigo</p>
+        </div>
+    </section>
+
+    <!-- ===== SECCIÓN CLIENTES ===== -->
+    <section class="clientes">
+        <h2>Nuestros Primeros Clientes</h2>
+        <div class="clientes-grid">
+            <div class="cliente-card">
+                <img src="IMG/estrella.jpg" alt="Estrellita">
+                <h3>Estrellita - French Poodle</h3>
+                <i><p>"Es muy juguetón, alegre, le gusta salir al parque, disfrutar de abrazos y el sol."</p></i>
+            </div>
+            <div class="cliente-card">
+                <img src="IMG/lady.jpg" alt="Lady">
+                <h3>Lady - Chihuahua</h3>
+                <i><p>"Es juguetona, le gusta que le hagan cariños, correr. No le gusta que le agarren sus patitas, le gusta el baño de burbujas."</p></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer-contacto">
+        <hr>
+        <div class="info-footer">
+            <p>📍 162 Ciudad de México | 📞 (52) 5512345678</p>
+            <p>soporte@petcare.com</p> 
+            <p>&copy; 2026 PetCare. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    
+    <!-- Modal para Registro de Mascota -->
+
+    <script src="JS/perfiles.js"></script>
+    <script src="JS/login.js"></script>
+    <script src="JS/registro.js"></script>
+    <script src="JS/app.js"></script>
+    <script src="JS/server.js"></script>
+       
+</section>
+    
+</body>
+</html>
