@@ -10,13 +10,20 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, './')));
 
 // CONEXIÓN INTEGRAL A MYSQL
-const db = mysql.createConnection({
+// 1. Asegúrate de cambiar "createConnection" por "createPool"
+const db = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || 'belen28',
     database: process.env.DB_NAME || 'petcare_db',
-    port: process.env.DB_PORT || 3306
+    port: process.env.DB_PORT || 3306,
+    waitForConnections: true,
+    connectionLimit: 10, // Permite hasta 10 usuarios pidiendo datos a la vez
+    queueLimit: 0
 });
+
+// Nota importante: El resto de tus rutas que usan db.query(...) 
+// se quedan EXACTAMENTE igual. No tienes que cambiarles nada.
 
 db.connect((err) => {
     if (err) {
