@@ -22,16 +22,6 @@ const db = mysql.createPool({
     queueLimit: 0
 });
 
-// Nota importante: El resto de tus rutas que usan db.query(...) 
-// se quedan EXACTAMENTE igual. No tienes que cambiarles nada.
-
-db.connect((err) => {
-    if (err) {
-        console.error(' Fallo al acoplar base de datos MySQL:', err);
-        return;
-    }
-    console.log(' Base de datos MySQL enlazada con éxito .');
-});
 
 // Ruta raíz
 app.get('/', (req, res) => {
