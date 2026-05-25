@@ -11,10 +11,11 @@ app.use(express.static(path.join(__dirname, './')));
 
 // CONEXIÓN INTEGRAL A MYSQL
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'belen28', 
-    database: 'petcare_db'
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'belen28',
+    database: process.env.DB_NAME || 'petcare_db',
+    port: process.env.DB_PORT || 3306
 });
 
 db.connect((err) => {
