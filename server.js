@@ -12,17 +12,16 @@ app.use(express.static(path.join(__dirname, './')));
 // CONEXIÓN INTEGRAL A MYSQL
 // 1. Asegúrate de cambiar "createConnection" por "createPool"
 const db = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'belen28',
-    database: process.env.DB_NAME || 'petcare_db',
-    port: process.env.DB_PORT || 3306,
+    // Esto asegura que si Render busca DB_HOST o MYSQLHOST, use el que encuentre disponible
+    host: process.env.DB_HOST || process.env.MYSQLHOST || 'localhost',
+    user: process.env.DB_USER || process.env.MYSQLUSER || 'root',
+    password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || 'belen28',
+    database: process.env.DB_NAME || process.env.MYSQLDATABASE || 'petcare_db',
+    port: process.env.DB_PORT || process.env.MYSQLPORT || 3306,
     waitForConnections: true,
-    connectionLimit: 10, // Permite hasta 10 usuarios pidiendo datos a la vez
+    connectionLimit: 10,
     queueLimit: 0
 });
-
-
 // Ruta raíz
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
