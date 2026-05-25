@@ -11,12 +11,14 @@ app.use(express.static(path.join(__dirname, './')));
 
 // CONEXIÓN INTEGRAL A MYSQL
 // 1. Asegúrate de cambiar "createConnection" por "createPool"
+// CONEXIÓN INTEGRAL A MYSQL
 const db = mysql.createPool({
-    host: 'mysql.railway.internal', // <--- PEGA AQUÍ TU HOST PÚBLICO REAL DE RAILWAY (Sin http ni diagonales)
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'NTAGhTEyuOHkvWFliVQnTaKRFVxWpreM',
-    database: process.env.DB_NAME || 'railway',
-    port: process.env.DB_PORT || 3306,
+    // Lee dinámicamente las variables de Render, y si no hay, usa localhost
+    host: process.env.DB_HOST || process.env.MYSQLHOST || 'localhost',
+    user: process.env.DB_USER || process.env.MYSQLUSER || 'root',
+    password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || 'NTAGhTEyuOHkvWFliVQnTaKRFVxWpreM',
+    database: process.env.DB_NAME || process.env.MYSQLDATABASE || 'railway',
+    port: process.env.DB_PORT || process.env.MYSQLPORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
