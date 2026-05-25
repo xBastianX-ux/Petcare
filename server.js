@@ -12,13 +12,13 @@ app.use(express.static(path.join(__dirname, './')));
 // CONEXIÓN INTEGRAL A MYSQL
 // 1. Asegúrate de cambiar "createConnection" por "createPool"
 // CONEXIÓN INTEGRAL A MYSQL
+// CONEXIÓN INTEGRAL A MYSQL
 const db = mysql.createPool({
-    // Lee dinámicamente las variables de Render, y si no hay, usa localhost
-    host: process.env.DB_HOST || process.env.MYSQLHOST || 'localhost',
-    user: process.env.DB_USER || process.env.MYSQLUSER || 'root',
-    password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || 'NTAGhTEyuOHkvWFliVQnTaKRFVxWpreM',
-    database: process.env.DB_NAME || process.env.MYSQLDATABASE || 'railway',
-    port: process.env.DB_PORT || process.env.MYSQLPORT || 3306,
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'belen28',
+    database: process.env.DB_NAME || 'petcare_db',
+    port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
