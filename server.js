@@ -34,7 +34,10 @@ app.get('/', (req, res) => {
 app.post('/api/auth/registrar', (req, res) => {
     const { nombre, email, password } = req.body;
     db.query('INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)', [nombre, email, password], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
+        if (err) {
+            console.log("ERROR EN REGISTRO:", err); // <--- ESTO NOS VA A DECIR LA VERDAD EN LOS LOGS
+            return res.status(500).json({ error: err.message });
+        }
         res.status(201).json({ usuarioId: result.insertId });
     });
 });
@@ -42,7 +45,10 @@ app.post('/api/auth/registrar', (req, res) => {
 app.post('/api/auth/login', (req, res) => {
     const { email, password } = req.body;
     db.query('SELECT id, nombre FROM usuarios WHERE email = ? AND password = ?', [email, password], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
+        if (err) {
+            console.log("ERROR EN LOGIN:", err); // <--- ESTO TAMBIÉN
+            return res.status(500).json({ error: err.message });
+        }
         if (results.length === 0) return res.status(401).json({ error: 'Usuario o clave inválidos.' });
         res.status(200).json({ usuario: results[0] });
     });
