@@ -7,12 +7,12 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+// Asegura la ruta estática para renderizar tus archivos HTML/CSS/JS locales
 app.use(express.static(path.join(__dirname, './')));
 
-// CONEXIÓN INTEGRAL A MYSQL
-// 1. Asegúrate de cambiar "createConnection" por "createPool"
-// CONEXIÓN INTEGRAL A MYSQL
-// CONEXIÓN INTEGRAL A MYSQL
+// ==========================================
+// CONEXIÓN INTEGRAL A MYSQL (POOL)
+// ==========================================
 const db = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
@@ -23,7 +23,8 @@ const db = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
-// Ruta raíz
+
+// Ruta raíz para servir la interfaz
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -35,7 +36,7 @@ app.post('/api/auth/registrar', (req, res) => {
     const { nombre, email, password } = req.body;
     db.query('INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)', [nombre, email, password], (err, result) => {
         if (err) {
-            console.log("ERROR EN REGISTRO:", err); // <--- ESTO NOS VA A DECIR LA VERDAD EN LOS LOGS
+            console.log("ERROR EN REGISTRO:", err); 
             return res.status(500).json({ error: err.message });
         }
         res.status(201).json({ usuarioId: result.insertId });
@@ -46,7 +47,7 @@ app.post('/api/auth/login', (req, res) => {
     const { email, password } = req.body;
     db.query('SELECT id, nombre FROM usuarios WHERE email = ? AND password = ?', [email, password], (err, results) => {
         if (err) {
-            console.log("ERROR EN LOGIN:", err); // <--- ESTO TAMBIÉN
+            console.log("ERROR EN LOGIN:", err); 
             return res.status(500).json({ error: err.message });
         }
         if (results.length === 0) return res.status(401).json({ error: 'Usuario o clave inválidos.' });
@@ -75,16 +76,17 @@ app.post('/api/mascotas', (req, res) => {
 // ==========================================
 // CONTROL DE CITAS
 // ==========================================
-app.get('/api/citas/:mascota_id', (req, res) => {
-    db.query('SELECT * FROM citas WHERE mascota_id = ? ORDER BY fecha ASC', [req.params.mascota_id], (err, results) => {
+// Nota: Ajustado temporalmente sin depender de mascota_id si tu tabla original no lo incluye.
+app.get('/api/citas/:usuario_id', (req, res) => {
+    db.query('SELECT * FROM citas ORDER BY fecha ASC', (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.status(200).json(results);
     });
 });
 
 app.post('/api/citas', (req, res) => {
-    const { mascota_id, titulo, fecha, hora, veterinario, motivo } = req.body;
-    db.query('INSERT INTO citas (mascota_id, titulo, fecha, hora, veterinario, motivo) VALUES (?, ?, ?, ?, ?, ?)', [mascota_id, titulo, fecha, hora, veterinario, motivo], (err) => {
+    const { titulo, fecha, hora, veterinario, motivo } = req.body;
+    db.query('INSERT INTO citas (titulo, fecha, hora, veterinario, motivo) VALUES (?, ?, ?, ?, ?)', [titulo, fecha, hora, veterinario, motivo], (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({ mensaje: 'Éxito' });
     });
@@ -126,4 +128,11 @@ app.post('/api/paseos', (req, res) => {
     });
 });
 
-fetch('/api/auth/login', { ... })
+// ==========================================
+// ARRANQUE DEL SERVIDOR
+// ==========================================
+const PORT = process.env.PORT || 3000;
+// Usar '0.0.0.0' es crucial para contenedores Docker en Render
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
+});
